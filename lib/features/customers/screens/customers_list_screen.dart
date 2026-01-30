@@ -15,7 +15,7 @@ class CustomersListScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Customers'),
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.secondary,
         foregroundColor: Colors.white,
       ),
       floatingActionButton: FloatingActionButton(

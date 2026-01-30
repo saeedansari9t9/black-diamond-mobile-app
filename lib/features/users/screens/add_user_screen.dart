@@ -47,7 +47,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Add User'),
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.secondary,
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(

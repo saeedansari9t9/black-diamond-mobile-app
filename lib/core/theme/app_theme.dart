@@ -16,6 +16,14 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: AppColors.background,
 
+      // Global AppBar Theme
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.secondary,
+        foregroundColor: Colors.white,
+        centerTitle: true,
+        elevation: 0,
+      ),
+
       // Typography
       textTheme: GoogleFonts.interTextTheme().apply(
         bodyColor: AppColors.textPrimary,

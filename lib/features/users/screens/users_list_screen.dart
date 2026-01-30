@@ -16,7 +16,7 @@ class UsersListScreen extends StatelessWidget {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Users'),
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.secondary,
         foregroundColor: Colors.white,
       ),
       floatingActionButton: FloatingActionButton(

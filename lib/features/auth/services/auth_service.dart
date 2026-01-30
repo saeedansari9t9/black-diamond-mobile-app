@@ -19,6 +19,9 @@ class AuthService {
     return _token;
   }
 
+  String get userName => _box.read('user_name') ?? 'Guest';
+  String get userEmail => _box.read('user_email') ?? '';
+
   Future<bool> login(String email, String password) async {
     try {
       final response = await http.post(
@@ -42,6 +45,14 @@ class AuthService {
 
         if (token != null) {
           await _box.write(_tokenKey, token);
+
+          // Store user info if available
+          if (data['data'] != null && data['data']['user'] != null) {
+            final user = data['data']['user'];
+            await _box.write('user_name', user['name'] ?? 'User');
+            await _box.write('user_email', user['email'] ?? '');
+          }
+
           print('Token stored: $token'); // DEBUG LOG
           return true;
         }
@@ -56,5 +67,7 @@ class AuthService {
 
   Future<void> logout() async {
     await _box.remove(_tokenKey);
+    await _box.remove('user_name');
+    await _box.remove('user_email');
   }
 }

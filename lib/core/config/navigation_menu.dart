@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MenuItem {
@@ -20,30 +21,30 @@ class NavigationConfig {
   static const List<MenuItem> items = [
     MenuItem(
       label: "Dashboard",
-      icon: Icons.dashboard,
+      icon: CupertinoIcons.home,
       route: "/dashboard",
       roles: ["admin", "manager", "accountant", "sales", "inventory"],
     ),
     MenuItem(
       label: "Masters",
-      icon: Icons.content_cut, // Closest to Scissors
+      icon: CupertinoIcons.layers,
       roles: ["admin", "manager", "sales", "accountant", "inventory"],
       submenu: [
         MenuItem(
           label: "Add Materials",
-          icon: Icons.add_circle_outline,
+          icon: CupertinoIcons.add_circled,
           route: "/masters/materials",
           roles: ["admin", "manager", "sales", "accountant", "inventory"],
         ),
         MenuItem(
           label: "Add Raw Materials",
-          icon: Icons.raw_on,
+          icon: CupertinoIcons.cube_box,
           route: "/inventory/raw-materials",
           roles: ["admin", "manager", "inventory"],
         ),
         MenuItem(
           label: "Add Products",
-          icon: Icons.add_box_outlined,
+          icon: CupertinoIcons.cube_box_fill,
           route: "/masters/products",
           roles: ["admin", "manager", "sales", "inventory"],
         ),
@@ -51,18 +52,18 @@ class NavigationConfig {
     ),
     MenuItem(
       label: "Sales & Ops",
-      icon: Icons.description, // Closest to FileText
+      icon: CupertinoIcons.doc_text,
       roles: ["admin", "manager", "sales", "accountant"],
       submenu: [
         MenuItem(
           label: "Add New Sale",
-          icon: Icons.post_add,
+          icon: CupertinoIcons.plus_rectangle,
           route: "/sales/add",
           roles: ["admin", "manager", "sales", "accountant"],
         ),
         MenuItem(
           label: "All Invoices List",
-          icon: Icons.receipt_long,
+          icon: CupertinoIcons.doc_text_search,
           route: "/sales/invoices",
           roles: ["admin", "manager", "sales", "accountant"],
         ),
@@ -70,24 +71,24 @@ class NavigationConfig {
     ),
     MenuItem(
       label: "Inventory",
-      icon: Icons.inventory_2, // Closest to PackageIcon
+      icon: CupertinoIcons.archivebox,
       roles: ["admin", "manager", "inventory", "accountant"],
       submenu: [
         MenuItem(
           label: "View Current Stock",
-          icon: Icons.warehouse,
+          icon: CupertinoIcons.building_2_fill,
           route: "/inventory/stock",
           roles: ["admin", "manager", "inventory", "sales"],
         ),
         MenuItem(
           label: "Stock Production Entry",
-          icon: Icons.precision_manufacturing,
+          icon: CupertinoIcons.arrow_2_circlepath_circle,
           route: "/inventory/production",
           roles: ["admin", "manager", "inventory"],
         ),
         MenuItem(
           label: "Add/Remove Stock",
-          icon: Icons.compare_arrows,
+          icon: CupertinoIcons.arrow_right_arrow_left,
           route: "/inventory/adjust-stock",
           roles: ["admin", "manager", "inventory"],
         ),
@@ -95,24 +96,24 @@ class NavigationConfig {
     ),
     MenuItem(
       label: "Purchasing",
-      icon: Icons.shopping_cart,
+      icon: CupertinoIcons.shopping_cart,
       roles: ["admin", "manager", "inventory", "accountant"],
       submenu: [
         MenuItem(
           label: "Purchases List",
-          icon: Icons.list_alt,
+          icon: CupertinoIcons.list_bullet,
           route: "/purchases",
           roles: ["admin", "manager", "inventory", "accountant"],
         ),
         MenuItem(
           label: "Add New Purchase",
-          icon: Icons.add_shopping_cart,
+          icon: CupertinoIcons.cart_badge_plus,
           route: "/purchases/new",
           roles: ["admin", "manager", "inventory"],
         ),
         MenuItem(
           label: "Suppliers List",
-          icon: Icons.people_alt_outlined,
+          icon: CupertinoIcons.person_2,
           route: "/purchases/suppliers",
           roles: ["admin", "manager", "inventory", "accountant"],
         ),
@@ -120,12 +121,12 @@ class NavigationConfig {
     ),
     MenuItem(
       label: "Reports",
-      icon: Icons.bar_chart,
+      icon: CupertinoIcons.chart_bar,
       roles: ["admin", "manager", "accountant"],
       submenu: [
         MenuItem(
           label: "Sales Report",
-          icon: Icons.analytics,
+          icon: CupertinoIcons.graph_square,
           route: "/reports/sales",
           roles: ["admin", "manager", "accountant"],
         ),
@@ -133,18 +134,18 @@ class NavigationConfig {
     ),
     MenuItem(
       label: "Customers",
-      icon: Icons.people,
+      icon: CupertinoIcons.person_3,
       route: "/customers",
       roles: ["admin", "manager", "sales", "accountant"],
     ),
     MenuItem(
       label: "Settings",
-      icon: Icons.settings,
+      icon: CupertinoIcons.settings,
       roles: ["admin"],
       submenu: [
         MenuItem(
           label: "Users",
-          icon: Icons.manage_accounts,
+          icon: CupertinoIcons.person_crop_circle_badge_checkmark,
           route: "/users",
           roles: ["admin"],
         ),

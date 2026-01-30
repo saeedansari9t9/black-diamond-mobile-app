@@ -121,7 +121,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(isEditing ? 'Edit Product' : 'Add Product'),
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.secondary,
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(

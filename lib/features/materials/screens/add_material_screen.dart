@@ -120,7 +120,7 @@ class _AddMaterialScreenState extends State<AddMaterialScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: Text(isEditing ? 'Edit Material' : 'Add Material'),
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.secondary,
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(

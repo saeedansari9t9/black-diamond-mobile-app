@@ -47,7 +47,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Add Customer'),
-        backgroundColor: AppColors.primary,
+        backgroundColor: AppColors.secondary,
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(

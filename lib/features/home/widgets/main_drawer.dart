@@ -12,123 +12,179 @@ class MainDrawer extends StatelessWidget {
     // Inject AuthController to handle logout
     final authController = Get.find<AuthController>();
 
+    // "side bar ka color meri theme ka use kro" - Using AppColors.secondary (Blue)
     return Drawer(
-      backgroundColor: AppColors.primary,
-      child: Column(
-        children: [
-          // Header
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              border: Border(bottom: BorderSide(color: Colors.white12)),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+      backgroundColor: AppColors.secondary,
+      child: SafeArea(
+        child: Column(
+          children: [
+            // Custom Profile Header
+            // "profile ki jaga icon use krlena size chota hi rkhna"
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 40, 24, 24),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(
-                    Icons.diamond_outlined,
-                    size: 48,
-                    color: AppColors.secondary,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    'BLACK DIAMOND',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  // Small Profile Icon
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withOpacity(0.1),
+                    ),
+                    child: const Icon(
+                      Icons.person,
                       color: Colors.white,
-                      letterSpacing: 1.2,
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  // User Info
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Obx(
+                          () => Text(
+                            authController.userName.value.isNotEmpty
+                                ? authController.userName.value
+                                : 'Ahmed Ali',
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Obx(
+                          () => Text(
+                            authController.userEmail.value.isNotEmpty
+                                ? authController.userEmail.value
+                                : 'ahmed@example.com',
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: Colors.white54),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ),
 
-          // Menu Items
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              children: [
-                ...NavigationConfig.items.map((item) {
-                  if (item.submenu != null && item.submenu!.isNotEmpty) {
-                    return ExpansionTile(
-                      leading: Icon(item.icon, color: Colors.white70),
-                      title: Text(
-                        item.label,
-                        style: const TextStyle(color: Colors.white70),
-                      ),
-                      iconColor: AppColors.secondary,
-                      collapsedIconColor: Colors.white70,
-                      children: item.submenu!.map((subItem) {
-                        return ListTile(
-                          contentPadding: const EdgeInsets.only(
-                            left: 56,
-                            right: 24,
-                          ),
-                          leading: Icon(
-                            subItem.icon,
-                            color: Colors.white54,
-                            size: 20,
-                          ),
+            // Divider
+            const Divider(
+              color: Colors.white12,
+              thickness: 1,
+              indent: 24,
+              endIndent: 24,
+            ),
+
+            const SizedBox(height: 16),
+
+            // Navigation Items
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  ...NavigationConfig.items.map((item) {
+                    if (item.submenu != null && item.submenu!.isNotEmpty) {
+                      return Theme(
+                        data: Theme.of(
+                          context,
+                        ).copyWith(dividerColor: Colors.transparent),
+                        child: ExpansionTile(
+                          leading: Icon(item.icon, color: Colors.white),
                           title: Text(
-                            subItem.label,
+                            item.label,
                             style: const TextStyle(
-                              color: Colors.white54,
-                              fontSize: 14,
+                              color: Colors.white,
+                              fontSize: 16,
                             ),
                           ),
-                          onTap: () {
-                            if (subItem.route != null) {
-                              // Close drawer then navigate
-                              Get.back();
-                              Get.toNamed(subItem.route!);
-                            }
-                          },
-                        );
-                      }).toList(),
-                    );
-                  } else {
-                    return ListTile(
-                      leading: Icon(item.icon, color: Colors.white70),
-                      title: Text(
-                        item.label,
-                        style: const TextStyle(color: Colors.white70),
-                      ),
-                      onTap: () {
-                        if (item.route == '/dashboard') {
-                          Get.back();
-                        } else if (item.route != null) {
-                          Get.back();
-                          Get.toNamed(item.route!);
-                        }
-                      },
-                    );
-                  }
-                }),
-              ],
+                          iconColor: Colors.white,
+                          collapsedIconColor: Colors.white,
+                          childrenPadding: const EdgeInsets.only(left: 16),
+                          children: item.submenu!.map((subItem) {
+                            return ListTile(
+                              leading: Icon(
+                                subItem.icon,
+                                color: Colors.white70,
+                                size: 20,
+                              ),
+                              title: Text(
+                                subItem.label,
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              onTap: () {
+                                if (subItem.route != null) {
+                                  Get.back(); // Close drawer
+                                  Get.toNamed(subItem.route!);
+                                }
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      );
+                    } else {
+                      return ListTile(
+                        leading: Icon(item.icon, color: Colors.white),
+                        title: Text(
+                          item.label,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                        onTap: () {
+                          if (item.route == '/dashboard') {
+                            Get.back();
+                          } else if (item.route != null) {
+                            Get.back();
+                            Get.toNamed(item.route!);
+                          }
+                        },
+                      );
+                    }
+                  }),
+                ],
+              ),
             ),
-          ),
 
-          // Logout
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListTile(
-              leading: const Icon(Icons.logout, color: AppColors.error),
-              title: const Text(
-                'Logout',
-                style: TextStyle(
-                  color: AppColors.error,
-                  fontWeight: FontWeight.bold,
+            // Bottom "Sing out" Button
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    authController.logout();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white.withOpacity(
+                      0.1,
+                    ), // Dark grey button background
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    elevation: 0,
+                  ),
+                  child: const Text(
+                    'Sign out',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-              onTap: () {
-                authController.logout();
-              },
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

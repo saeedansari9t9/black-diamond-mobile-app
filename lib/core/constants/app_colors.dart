@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppColors {
   // Primary Palette
   static const Color primary = Color(0xFF1A1A1A); // Black/Dark Grey
-  static const Color secondary = Color(0xFFD4AF37); // Gold/Diamond Color
+  static const Color secondary = Color(0xFF2B67B8); // User requested Blue
 
   // Backgrounds
   static const Color background = Color(0xFFF5F5F5);

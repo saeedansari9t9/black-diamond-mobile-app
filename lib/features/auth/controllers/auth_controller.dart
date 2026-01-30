@@ -7,6 +7,16 @@ class AuthController extends GetxController {
   final AuthService _authService = AuthService();
 
   var isLoading = false.obs;
+  var userName = ''.obs;
+  var userEmail = ''.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Load initial user info
+    userName.value = _authService.userName;
+    userEmail.value = _authService.userEmail;
+  }
 
   Future<void> login(String email, String password) async {
     isLoading.value = true;
@@ -14,6 +24,10 @@ class AuthController extends GetxController {
       final success = await _authService.login(email, password);
 
       if (success) {
+        // Update user info
+        userName.value = _authService.userName;
+        userEmail.value = _authService.userEmail;
+
         Get.snackbar(
           'Success',
           'Login Successful!',
@@ -54,8 +68,16 @@ class AuthController extends GetxController {
     }
   }
 
-  void logout() {
-    // Clear token logic if implemented in service
-    Get.offAllNamed('/'); // Navigate to login/splash
+  void logout() async {
+    // Clear storage
+    await _authService.logout();
+
+    // Clear local state
+    userName.value = '';
+    userEmail.value = '';
+
+    // Navigate to Login Screen
+    // using Get.offAll to remove all previous routes
+    Get.offAll(() => const LoginScreen());
   }
 }
