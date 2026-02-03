@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../widgets/custom_bottom_nav_bar.dart';
+import '../widgets/main_drawer.dart';
 import 'dashboard_screen.dart';
-import '../../sales/screens/sales_list_screen.dart';
 import '../../sales/screens/add_sale_screen.dart';
 import '../../sales/screens/invoices_screen.dart';
 import '../../profile/screens/profile_screen.dart';
@@ -19,7 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _screens = [
     const DashboardScreen(),
-    const SalesListScreen(),
+    const InvoicesScreen(), // Replaced SalesListScreen
     // Add padding to lift the "Submit" button above the floating nav bar
     const AddSaleScreen(),
     const InvoicesScreen(),
@@ -42,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
           return screen;
         }).toList(),
       ),
+      drawer:
+          const MainDrawer(), // Moved from DashboardScreen to here for full height
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _currentIndex,
         onTap: (index) {

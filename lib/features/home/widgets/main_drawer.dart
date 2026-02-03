@@ -156,29 +156,40 @@ class MainDrawer extends StatelessWidget {
               ),
             ),
 
-            // Bottom "Sing out" Button
+            // Bottom "Sign out" Button
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: SizedBox(
                 width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
+                height: 48, // Restored to standard height to fix clipping
+                child: ElevatedButton.icon(
                   onPressed: () {
-                    authController.logout();
+                    Get.defaultDialog(
+                      title: "Sign Out",
+                      middleText: "Are you sure you want to sign out?",
+                      textConfirm: "Yes, Sign Out",
+                      textCancel: "Cancel",
+                      confirmTextColor: Colors.white,
+                      buttonColor: Colors.red.shade400,
+                      cancelTextColor: Colors.black,
+                      onConfirm: () {
+                        Get.back(); // Close dialog
+                        authController.logout();
+                      },
+                    );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white.withOpacity(
-                      0.1,
-                    ), // Dark grey button background
+                    backgroundColor: Colors.red.shade400, // Distinct soft red
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
+                  icon: const Icon(Icons.logout, size: 18, color: Colors.white),
+                  label: const Text(
                     'Sign out',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),

@@ -56,6 +56,11 @@ class AuthController extends GetxController {
     await Future.delayed(const Duration(seconds: 2)); // Splash delay
     final token = await _authService.getToken();
     if (token != null) {
+      // Refresh user profile in background
+      _authService.getMe().then((_) {
+        userName.value = _authService.userName;
+        userEmail.value = _authService.userEmail;
+      });
       Get.offAll(() => const HomeScreen());
     } else {
       Get.offAll(

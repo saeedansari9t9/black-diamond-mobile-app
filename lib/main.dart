@@ -5,13 +5,21 @@ import 'features/splash/splash_screen.dart';
 import 'core/widgets/placeholder_screen.dart';
 import 'features/materials/screens/materials_list_screen.dart';
 import 'features/materials/screens/add_material_screen.dart';
+import 'features/raw_materials/screens/raw_materials_list_screen.dart';
 import 'features/products/screens/products_list_screen.dart';
 import 'features/products/screens/add_product_screen.dart';
 import 'features/users/screens/users_list_screen.dart';
 import 'features/users/screens/add_user_screen.dart';
 import 'features/sales/screens/add_sale_screen.dart';
+import 'features/sales/screens/invoices_screen.dart';
+import 'features/sales/screens/invoice_detail_screen.dart';
+import 'features/inventory/screens/stock_screen.dart';
+import 'features/inventory/screens/adjust_stock_screen.dart';
+import 'features/inventory/screens/production_screen.dart';
 import 'features/customers/screens/customers_list_screen.dart';
 import 'features/customers/screens/add_customer_screen.dart';
+import 'features/customers/screens/customer_ledger_screen.dart';
+import 'features/suppliers/screens/suppliers_list_screen.dart';
 
 import 'package:get_storage/get_storage.dart';
 
@@ -56,27 +64,31 @@ class BlackDiamondApp extends StatelessWidget {
         // Placeholders
         GetPage(
           name: '/inventory/raw-materials',
-          page: () => const PlaceholderScreen(title: 'Raw Materials'),
+          page: () => const RawMaterialsListScreen(),
         ),
         GetPage(
           name: '/sales/new',
           page: () => const PlaceholderScreen(title: 'New Sale'),
         ),
+        GetPage(name: '/sales/invoices', page: () => const InvoicesScreen()),
         GetPage(
-          name: '/sales/invoices',
-          page: () => const PlaceholderScreen(title: 'Invoices'),
+          name: '/sales/invoices/:id/print',
+          page: () {
+            // Retrieve arguments passed via Get.toNamed
+            // OR fetch if not passed (but detailed implementation relies on object for now)
+            // For robustness, we can handle fetch in onInit of controller if we used one for detail
+            // But passing argument is simplest for "Print after create"
+            return InvoiceDetailScreen(sale: Get.arguments);
+          },
         ),
-        GetPage(
-          name: '/inventory/stock',
-          page: () => const PlaceholderScreen(title: 'Stock'),
-        ),
+        GetPage(name: '/inventory/stock', page: () => const StockScreen()),
         GetPage(
           name: '/inventory/production',
-          page: () => const PlaceholderScreen(title: 'Production'),
+          page: () => const ProductionScreen(),
         ),
         GetPage(
           name: '/inventory/adjust-stock',
-          page: () => const PlaceholderScreen(title: 'Adjust Stock'),
+          page: () => const AdjustStockScreen(),
         ),
         GetPage(
           name: '/purchases',
@@ -88,7 +100,7 @@ class BlackDiamondApp extends StatelessWidget {
         ),
         GetPage(
           name: '/purchases/suppliers',
-          page: () => const PlaceholderScreen(title: 'Suppliers'),
+          page: () => const SuppliersListScreen(),
         ),
         GetPage(
           name: '/reports/sales',
@@ -100,6 +112,10 @@ class BlackDiamondApp extends StatelessWidget {
         // Customers
         GetPage(name: '/customers', page: () => const CustomersListScreen()),
         GetPage(name: '/customers/add', page: () => const AddCustomerScreen()),
+        GetPage(
+          name: '/customers/:id/ledger',
+          page: () => const CustomerLedgerScreen(),
+        ),
       ],
     );
   }

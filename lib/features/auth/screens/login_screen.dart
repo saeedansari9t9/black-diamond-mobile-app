@@ -27,10 +27,10 @@ class LoginScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Header
-                  Icon(
-                    Icons.diamond,
-                    size: 60,
-                    color: AppColors.primary,
+                  Image.asset(
+                    'lib/Diamond.png',
+                    width: 120,
+                    height: 120,
                   ).animate().scale(),
                   const SizedBox(height: 24),
                   Text(
@@ -38,7 +38,7 @@ class LoginScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
+                      color: AppColors.secondary, // Theme Blue
                     ),
                   ).animate().fadeIn(delay: 200.ms),
                   const SizedBox(height: 8),
@@ -77,6 +77,10 @@ class LoginScreen extends StatelessWidget {
                     () => SizedBox(
                       height: 56,
                       child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppColors.secondary, // Theme Blue
+                          foregroundColor: Colors.white,
+                        ),
                         onPressed: authController.isLoading.value
                             ? null
                             : () {
@@ -91,7 +95,13 @@ class LoginScreen extends StatelessWidget {
                             ? const CircularProgressIndicator(
                                 color: Colors.white,
                               )
-                            : const Text('Login'),
+                            : const Text(
+                                'Login',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
                       ),
                     ),
                   ).animate().slideY(delay: 600.ms, begin: 0.5),

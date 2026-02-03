@@ -56,6 +56,39 @@ class CustomerService {
     }
   }
 
-  // Future feature: Get History
-  // Future<List<SaleModel>> getCustomerHistory(String id) ...
+  // Get Ledger Data
+  Future<Map<String, dynamic>?> getLedger(String id) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/customers/$id/ledger'),
+        headers: await _getHeaders(),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['ok'] == true && data['data'] != null) {
+          return data['data'];
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Failed to fetch customer ledger: $e');
+      return null; // Return null instead of throwing to handle UI gracefully
+    }
+  }
+
+  // Receive Payment
+  Future<bool> receivePayment(String id, double amount, String note) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/customers/$id/payment'),
+        headers: await _getHeaders(),
+        body: jsonEncode({'amount': amount, 'note': note}),
+      );
+
+      return response.statusCode == 200 || response.statusCode == 201;
+    } catch (e) {
+      throw Exception('Failed to record payment: $e');
+    }
+  }
 }

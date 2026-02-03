@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../../core/constants/app_colors.dart';
-import '../../../core/config/navigation_menu.dart';
+import 'package:intl/intl.dart';
+import '../../../../core/constants/app_colors.dart';
+import '../../../../core/config/navigation_menu.dart';
 import '../widgets/main_drawer.dart';
+import '../controllers/dashboard_controller.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -20,11 +22,18 @@ class DashboardScreen extends StatelessWidget {
         backgroundColor: AppColors.secondary,
         foregroundColor: Colors.white,
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            // Open the drawer of the parent Scaffold (HomeScreen)
+            Scaffold.of(context).openDrawer();
+          },
+        ),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.refresh)),
         ],
       ),
-      drawer: const MainDrawer(),
+      // drawer: const MainDrawer(), // Removed: moved to HomeScreen
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -58,44 +67,58 @@ class DashboardScreen extends StatelessWidget {
 
   // 4 Stats Cards in a 2x2 Grid using Wrap or GridView
   Widget _buildStatsSection(BuildContext context) {
-    return GridView.count(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      childAspectRatio: 1.6, // Adjust for smaller, wider cards
-      children: [
-        _buildStatCard(
-          context,
-          title: 'Total Sales',
-          value: '\$12,450',
-          icon: CupertinoIcons.money_dollar_circle_fill,
-          color: Colors.blueAccent,
-        ),
-        _buildStatCard(
-          context,
-          title: 'Orders',
-          value: '45',
-          icon: CupertinoIcons.cart_fill,
-          color: Colors.orangeAccent,
-        ),
-        _buildStatCard(
-          context,
-          title: 'Customers',
-          value: '128',
-          icon: CupertinoIcons.person_2_fill,
-          color: Colors.greenAccent,
-        ),
-        _buildStatCard(
-          context,
-          title: 'Pending',
-          value: '12',
-          icon: CupertinoIcons.clock_fill,
-          color: Colors.redAccent,
-        ),
-      ],
-    );
+    final controller = Get.put(DashboardController());
+
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      // Currency Formatter
+      final currencyFormat = NumberFormat.currency(
+        symbol: 'PKR ',
+        decimalDigits: 0,
+      );
+
+      return GridView.count(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisCount: 2,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 1.6,
+        children: [
+          _buildStatCard(
+            context,
+            title: 'Monthly Sales',
+            value: currencyFormat.format(controller.totalSales.value),
+            icon: CupertinoIcons.money_dollar_circle_fill,
+            color: Colors.blueAccent,
+          ),
+          _buildStatCard(
+            context,
+            title: 'Monthly Orders',
+            value: '${controller.totalOrders.value}',
+            icon: CupertinoIcons.cart_fill,
+            color: Colors.orangeAccent,
+          ),
+          _buildStatCard(
+            context,
+            title: 'Customers',
+            value: '${controller.totalCustomers.value}',
+            icon: CupertinoIcons.person_2_fill,
+            color: Colors.greenAccent,
+          ),
+          _buildStatCard(
+            context,
+            title: 'Suppliers',
+            value: '${controller.totalSuppliers.value}',
+            icon: CupertinoIcons.cube_box_fill,
+            color: Colors.purpleAccent,
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildStatCard(

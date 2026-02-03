@@ -1,6 +1,7 @@
 class SaleItemModel {
   final String productId;
   final String? productName; // Optional for UI display if needed
+  final String? sku;
   final double qty;
   final double price;
   final double lineTotal;
@@ -8,6 +9,7 @@ class SaleItemModel {
   SaleItemModel({
     required this.productId,
     this.productName,
+    this.sku,
     required this.qty,
     required this.price,
     required this.lineTotal,
@@ -23,16 +25,33 @@ class SaleItemModel {
   }
 
   factory SaleItemModel.fromJson(Map<String, dynamic> json) {
+    String pId = '';
+    String? pName;
+
+    // Check if productId is populated
+    if (json['productId'] is Map) {
+      pId = json['productId']['_id']?.toString() ?? '';
+      pName = json['productId']['name']?.toString();
+    } else {
+      pId = json['productId']?.toString() ?? '';
+    }
+
+    // Fallback: Check for productSnapshot (common in invoices for frozen data)
+    // Or sometimes just 'name' if flatten
+    if (pName == null && json['productSnapshot'] != null) {
+      pName = json['productSnapshot']['name'];
+    }
+    // Fallback: Check top-level 'name' if backend structure differs
+    if (pName == null && json['name'] != null) {
+      pName = json['name'];
+    }
+
     return SaleItemModel(
-      productId: json['productId'] is Map
-          ? json['productId']['_id']
-          : json['productId'],
-      productName: json['productId'] is Map
-          ? json['productId']['name']
-          : null, // If populated
-      qty: (json['qty'] as num).toDouble(),
-      price: (json['price'] as num).toDouble(),
-      lineTotal: (json['lineTotal'] as num).toDouble(),
+      productId: pId,
+      productName: pName, // Can be null, will default to 'Product' in UI
+      qty: (json['qty'] as num?)?.toDouble() ?? 0.0,
+      price: (json['price'] as num?)?.toDouble() ?? 0.0,
+      lineTotal: (json['lineTotal'] as num?)?.toDouble() ?? 0.0,
     );
   }
 }
@@ -89,21 +108,27 @@ class SaleModel {
       customerId: json['customerId'] is Map
           ? json['customerId']['_id']
           : json['customerId'],
-      customerName: json['customerName'],
+      customerName:
+          json['customerName'] ??
+          (json['customerSnapshot'] != null
+              ? json['customerSnapshot']['name']
+              : null),
       saleType: json['saleType'] ?? 'retail',
-      items: (json['items'] as List)
-          .map((e) => SaleItemModel.fromJson(e))
-          .toList(),
-      subTotal: (json['subTotal'] as num).toDouble(),
-      discount: (json['discount'] as num).toDouble(),
-      grandTotal: (json['grandTotal'] as num).toDouble(),
+      items:
+          (json['items'] as List?)
+              ?.map((e) => SaleItemModel.fromJson(e))
+              .toList() ??
+          [],
+      subTotal: (json['subTotal'] as num?)?.toDouble() ?? 0.0,
+      discount: (json['discount'] as num?)?.toDouble() ?? 0.0,
+      grandTotal: (json['grandTotal'] as num?)?.toDouble() ?? 0.0,
       paymentMethod: json['paymentMethod'] ?? 'cash',
-      paidAmount: (json['paidAmount'] as num).toDouble(),
-      dueAmount: (json['dueAmount'] as num).toDouble(),
+      paidAmount: (json['paidAmount'] as num?)?.toDouble() ?? 0.0,
+      dueAmount: (json['dueAmount'] as num?)?.toDouble() ?? 0.0,
       note: json['note'],
       invoiceNo: json['invoiceNo'],
       createdAt: json['createdAt'] != null
-          ? DateTime.parse(json['createdAt'])
+          ? DateTime.tryParse(json['createdAt'])
           : null,
     );
   }

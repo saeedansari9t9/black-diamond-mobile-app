@@ -65,6 +65,31 @@ class AuthService {
     }
   }
 
+  Future<void> getMe() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/auth/me'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${_token ?? ''}',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['ok'] == true && data['data'] != null) {
+          final user =
+              data['data']; // Assuming /auth/me returns user object in data
+          // Or check structure. Usually it is data: { _id, name, email ... }
+          await _box.write('user_name', user['name'] ?? 'User');
+          await _box.write('user_email', user['email'] ?? '');
+        }
+      }
+    } catch (e) {
+      print('Failed to fetch user profile: $e');
+    }
+  }
+
   Future<void> logout() async {
     await _box.remove(_tokenKey);
     await _box.remove('user_name');

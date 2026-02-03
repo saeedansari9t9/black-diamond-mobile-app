@@ -28,23 +28,12 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Logo / Icon Placeholder
-            Icon(
-              Icons.diamond_outlined,
-              size: 80,
-              color: AppColors.primary,
+            // Logo
+            Image.asset(
+              'lib/Diamond.png',
+              width: 150,
+              height: 150,
             ).animate().fade(duration: 600.ms).scale(delay: 200.ms),
-
-            const SizedBox(height: 20),
-
-            // App Name
-            Text(
-              'BLACK DIAMOND',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: AppColors.primary,
-                letterSpacing: 1.5,
-              ),
-            ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.3, end: 0),
           ],
         ),
       ),

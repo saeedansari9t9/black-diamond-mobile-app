@@ -18,7 +18,7 @@ class SalesService {
     };
   }
 
-  Future<bool> createSale(SaleModel sale) async {
+  Future<SaleModel?> createSale(SaleModel sale) async {
     try {
       final response = await http.post(
         Uri.parse('$_baseUrl/sales'),
@@ -26,17 +26,42 @@ class SalesService {
         body: jsonEncode(sale.toJson()),
       );
 
-      if (response.statusCode != 200 && response.statusCode != 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        if (data['ok'] == true && data['data'] != null) {
+          return SaleModel.fromJson(data['data']);
+        }
+      } else {
         // Debug Log
         print('Create Sale Failed: ${response.statusCode}');
         print('Response Body: ${response.body}');
-        return false;
       }
 
-      return true;
+      return null;
     } catch (e) {
       print('Exception in createSale: $e');
-      return false;
+      return null;
+    }
+  }
+
+  // Fetch Single Sale Detail
+  Future<SaleModel?> getSaleById(String id) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/sales/$id'),
+        headers: await _getHeaders(),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['ok'] == true && data['data'] != null) {
+          return SaleModel.fromJson(data['data']);
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Failed to fetch sale detail: $e');
+      return null;
     }
   }
 
