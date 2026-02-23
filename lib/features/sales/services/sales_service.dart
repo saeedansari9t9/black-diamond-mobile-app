@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart'; // For compute
 import 'package:http/http.dart' as http;
 import '../../auth/services/auth_service.dart';
 import '../models/sale_model.dart';
@@ -68,8 +69,9 @@ class SalesService {
   Future<List<SaleModel>> getSales({DateTime? from, DateTime? to}) async {
     try {
       String url = '$_baseUrl/sales?';
-      if (from != null) url += 'from=${from.toIso8601String()}&';
-      if (to != null) url += 'to=${to.toIso8601String()}&';
+      // Ensure UTC for consistency with server expectations
+      if (from != null) url += 'from=${from.toUtc().toIso8601String()}&';
+      if (to != null) url += 'to=${to.toUtc().toIso8601String()}&';
 
       final response = await http.get(
         Uri.parse(url),
@@ -77,15 +79,43 @@ class SalesService {
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        if (data['ok'] == true && data['data'] != null) {
-          final List list = data['data'];
-          return list.map((e) => SaleModel.fromJson(e)).toList();
-        }
+        // Use compute to parse JSON in a background isolate
+        return await compute(_parseSales, response.body);
       }
       return [];
     } catch (e) {
       throw Exception('Failed to fetch sales: $e');
     }
   }
+
+  // Fetch Sales Summary (Today, Week, Month, etc.)
+  Future<Map<String, dynamic>?> getSalesSummary(String range) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/reports/sales-summary?range=$range'),
+        headers: await _getHeaders(),
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['success'] == true && data['data'] != null) {
+          return data['data']; // Returns { totalSales, orders, ... }
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Failed to fetch sales summary for $range: $e');
+      return null;
+    }
+  }
+}
+
+// Top-level function for compute
+List<SaleModel> _parseSales(String responseBody) {
+  final data = jsonDecode(responseBody);
+  if (data['ok'] == true && data['data'] != null) {
+    final List list = data['data'];
+    return list.map((e) => SaleModel.fromJson(e)).toList();
+  }
+  return [];
 }

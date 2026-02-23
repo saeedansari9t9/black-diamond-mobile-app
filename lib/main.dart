@@ -20,6 +20,7 @@ import 'features/customers/screens/customers_list_screen.dart';
 import 'features/customers/screens/add_customer_screen.dart';
 import 'features/customers/screens/customer_ledger_screen.dart';
 import 'features/suppliers/screens/suppliers_list_screen.dart';
+import 'features/home/screens/all_services_screen.dart';
 
 import 'package:get_storage/get_storage.dart';
 
@@ -116,6 +117,9 @@ class BlackDiamondApp extends StatelessWidget {
           name: '/customers/:id/ledger',
           page: () => const CustomerLedgerScreen(),
         ),
+
+        // All Services
+        GetPage(name: '/all-services', page: () => const AllServicesScreen()),
       ],
     );
   }

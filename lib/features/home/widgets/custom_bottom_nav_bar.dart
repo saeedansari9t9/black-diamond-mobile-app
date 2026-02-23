@@ -17,7 +17,7 @@ class CustomBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     // Total height of the bar + floating button area
     final Size size = MediaQuery.of(context).size;
-    final double height = 80;
+    final double height = 65;
 
     return SizedBox(
       width: size.width,
@@ -30,9 +30,9 @@ class CustomBottomNavBar extends StatelessWidget {
             bottom: 0,
             left: 0,
             width: size.width,
-            height: 80, // Height of the bar itself
+            height: height, // Height of the bar itself
             child: CustomPaint(
-              size: Size(size.width, 80),
+              size: Size(size.width, height),
               painter: NavBarPainter(
                 backgroundColor: Colors.white,
                 borderColor: Colors.grey.withOpacity(0.3), // Light grey border
@@ -83,7 +83,7 @@ class CustomBottomNavBar extends StatelessWidget {
           // Center Button Label (Optional, below the float) or inside?
           // The image shows label "Offers" below the floating button.
           Positioned(
-            bottom: 12,
+            bottom: 5,
             left: 0,
             right: 0,
             child: Center(
@@ -104,7 +104,7 @@ class CustomBottomNavBar extends StatelessWidget {
             bottom: 0,
             left: 0,
             width: size.width,
-            height: 80,
+            height: height,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
@@ -133,7 +133,7 @@ class CustomBottomNavBar extends StatelessWidget {
       onTap: () => onTap(index),
       behavior: HitTestBehavior.opaque,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,

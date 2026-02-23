@@ -14,7 +14,8 @@ class MainDrawer extends StatelessWidget {
 
     // "side bar ka color meri theme ka use kro" - Using AppColors.secondary (Blue)
     return Drawer(
-      backgroundColor: AppColors.secondary,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      backgroundColor: const Color.fromARGB(226, 0, 63, 146),
       child: SafeArea(
         child: Column(
           children: [
@@ -91,107 +92,184 @@ class MainDrawer extends StatelessWidget {
                 children: [
                   ...NavigationConfig.items.map((item) {
                     if (item.submenu != null && item.submenu!.isNotEmpty) {
-                      return Theme(
-                        data: Theme.of(
-                          context,
-                        ).copyWith(dividerColor: Colors.transparent),
-                        child: ExpansionTile(
-                          leading: Icon(item.icon, color: Colors.white),
-                          title: Text(
-                            item.label,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                          iconColor: Colors.white,
-                          collapsedIconColor: Colors.white,
-                          childrenPadding: const EdgeInsets.only(left: 16),
-                          children: item.submenu!.map((subItem) {
-                            return ListTile(
-                              leading: Icon(
-                                subItem.icon,
-                                color: Colors.white70,
-                                size: 20,
-                              ),
+                      return Column(
+                        children: [
+                          Theme(
+                            data: Theme.of(
+                              context,
+                            ).copyWith(dividerColor: Colors.transparent),
+                            child: ExpansionTile(
+                              leading: Icon(item.icon, color: Colors.white),
                               title: Text(
-                                subItem.label,
+                                item.label,
                                 style: const TextStyle(
-                                  color: Colors.white70,
-                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontSize: 16,
                                 ),
                               ),
-                              onTap: () {
-                                if (subItem.route != null) {
-                                  Get.back(); // Close drawer
-                                  Get.toNamed(subItem.route!);
-                                }
-                              },
-                            );
-                          }).toList(),
-                        ),
+                              iconColor: Colors.white,
+                              collapsedIconColor: Colors.white,
+                              childrenPadding: const EdgeInsets.only(left: 16),
+                              children: item.submenu!.map((subItem) {
+                                return Column(
+                                  children: [
+                                    ListTile(
+                                      leading: Icon(
+                                        subItem.icon,
+                                        color: Colors.white70,
+                                        size: 20,
+                                      ),
+                                      title: Text(
+                                        subItem.label,
+                                        style: const TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        if (subItem.route != null) {
+                                          Get.back(); // Close drawer
+                                          Get.toNamed(subItem.route!);
+                                        }
+                                      },
+                                    ),
+                                    Divider(
+                                      height: 1,
+                                      thickness: 0.5,
+                                      color: Colors.grey.withOpacity(0.3),
+                                    ),
+                                  ],
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                          Divider(
+                            height: 1,
+                            thickness: 0.5,
+                            color: Colors.grey.withOpacity(0.8),
+                          ),
+                        ],
                       );
                     } else {
-                      return ListTile(
-                        leading: Icon(item.icon, color: Colors.white),
-                        title: Text(
-                          item.label,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
+                      return Column(
+                        children: [
+                          ListTile(
+                            leading: Icon(item.icon, color: Colors.white),
+                            title: Text(
+                              item.label,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              ),
+                            ),
+                            onTap: () {
+                              if (item.route == '/dashboard') {
+                                Get.back();
+                              } else if (item.route != null) {
+                                Get.back();
+                                Get.toNamed(item.route!);
+                              }
+                            },
                           ),
-                        ),
-                        onTap: () {
-                          if (item.route == '/dashboard') {
-                            Get.back();
-                          } else if (item.route != null) {
-                            Get.back();
-                            Get.toNamed(item.route!);
-                          }
-                        },
+                          Divider(
+                            height: 1,
+                            thickness: 0.5,
+                            color: Colors.grey.withOpacity(0.3),
+                          ),
+                        ],
                       );
                     }
                   }),
+                  // Added Sign Out as the last menu item
+                  Column(
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.logout, color: Colors.white),
+                        title: const Text(
+                          'Sign Out',
+                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        ),
+                        onTap: () {
+                          Get.dialog(
+                            Dialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              elevation: 0,
+                              backgroundColor: Colors.white,
+                              child: Container(
+                                padding: const EdgeInsets.all(20),
+                                width: 300,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Text(
+                                      "Sign Out",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.textPrimary,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    const Text(
+                                      "Are you sure you want to sign out?",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        TextButton(
+                                          onPressed: () => Get.back(),
+                                          style: TextButton.styleFrom(
+                                            foregroundColor: Colors.grey,
+                                          ),
+                                          child: const Text("Cancel"),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Get.back();
+                                            authController.logout();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor:
+                                                Colors.red.shade400,
+                                            foregroundColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            elevation: 0,
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 20,
+                                              vertical: 10,
+                                            ),
+                                          ),
+                                          child: const Text("Sign Out"),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      Divider(
+                        height: 1,
+                        thickness: 0.5,
+                        color: Colors.grey.withOpacity(0.3),
+                      ),
+                    ],
+                  ),
                 ],
-              ),
-            ),
-
-            // Bottom "Sign out" Button
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: SizedBox(
-                width: double.infinity,
-                height: 48, // Restored to standard height to fix clipping
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    Get.defaultDialog(
-                      title: "Sign Out",
-                      middleText: "Are you sure you want to sign out?",
-                      textConfirm: "Yes, Sign Out",
-                      textCancel: "Cancel",
-                      confirmTextColor: Colors.white,
-                      buttonColor: Colors.red.shade400,
-                      cancelTextColor: Colors.black,
-                      onConfirm: () {
-                        Get.back(); // Close dialog
-                        authController.logout();
-                      },
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red.shade400, // Distinct soft red
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 0,
-                  ),
-                  icon: const Icon(Icons.logout, size: 18, color: Colors.white),
-                  label: const Text(
-                    'Sign out',
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-                  ),
-                ),
               ),
             ),
           ],
