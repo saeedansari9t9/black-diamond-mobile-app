@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../controllers/customer_ledger_controller.dart';
-import '../../../../core/constants/app_colors.dart';
 
 class CustomerLedgerScreen extends StatelessWidget {
   const CustomerLedgerScreen({super.key});

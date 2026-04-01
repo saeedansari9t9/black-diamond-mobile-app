@@ -108,7 +108,22 @@ class DashboardScreen extends StatelessWidget {
                     if (dashboardItems.length > 4)
                       _buildShortcutRow(
                         context,
-                        dashboardItems.skip(4).toList(),
+                        dashboardItems.skip(4).take(4).toList(),
+                      ),
+
+                    // Horizontal Divider (Inset)
+                    if (dashboardItems.length > 8)
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        height: 1,
+                        color: Colors.grey.withOpacity(0.15),
+                      ),
+
+                    // Third Row
+                    if (dashboardItems.length > 8)
+                      _buildShortcutRow(
+                        context,
+                        dashboardItems.skip(8).take(4).toList(),
                       ),
                   ],
                 ),
@@ -920,9 +935,9 @@ class DashboardScreen extends StatelessWidget {
       }
     }
 
-    // Limit to 7 and add View All
-    if (flattened.length > 7) {
-      var limited = flattened.take(7).toList();
+    // Limit to 11 and add View All
+    if (flattened.length > 11) {
+      var limited = flattened.take(11).toList();
       limited.add(
         const MenuItem(
           label: 'View All',
@@ -948,8 +963,9 @@ class DashboardScreen extends StatelessWidget {
             color: Colors.transparent,
             child: InkWell(
               onTap: () {
-                if (item.route != null) {
-                  Get.toNamed(item.route!);
+                final r = item.route;
+                if (r != null) {
+                  Get.toNamed(r);
                 }
               },
               borderRadius: BorderRadius.circular(16),

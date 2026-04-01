@@ -125,8 +125,9 @@ class AllServicesScreen extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              if (item.route != null) {
-                Get.toNamed(item.route!);
+              final r = item.route;
+              if (r != null) {
+                Get.toNamed(r);
               } else {
                 Get.snackbar(
                   "Coming Soon",

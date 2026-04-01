@@ -139,6 +139,12 @@ class NavigationConfig {
       roles: ["admin", "manager", "sales", "accountant"],
     ),
     MenuItem(
+      label: "BC Management",
+      icon: CupertinoIcons.person_3_fill,
+      route: "/bc",
+      roles: ["admin", "manager"],
+    ),
+    MenuItem(
       label: "Settings",
       icon: CupertinoIcons.settings,
       roles: ["admin"],

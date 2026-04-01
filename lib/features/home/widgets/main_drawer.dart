@@ -127,9 +127,10 @@ class MainDrawer extends StatelessWidget {
                                         ),
                                       ),
                                       onTap: () {
-                                        if (subItem.route != null) {
+                                        final r = subItem.route;
+                                        if (r != null) {
                                           Get.back(); // Close drawer
-                                          Get.toNamed(subItem.route!);
+                                          Get.toNamed(r);
                                         }
                                       },
                                     ),
@@ -163,11 +164,12 @@ class MainDrawer extends StatelessWidget {
                               ),
                             ),
                             onTap: () {
-                              if (item.route == '/dashboard') {
+                              final r = item.route;
+                              if (r == '/dashboard') {
                                 Get.back();
-                              } else if (item.route != null) {
+                              } else if (r != null) {
                                 Get.back();
-                                Get.toNamed(item.route!);
+                                Get.toNamed(r);
                               }
                             },
                           ),
